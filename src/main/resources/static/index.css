@@ -1,0 +1,14 @@
+#დაამატე {
+    margin-top: 2px;
+    padding: 10px 20px;
+    background-color: #23078a;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+}
+.items-container {
+    display : flex;
+    flex-wrap: wrap;
+    gap: 400px;
+    margin-top: 50px;
+}
