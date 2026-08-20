@@ -1,13 +1,11 @@
 package com.example.emmarketplace.controller;
 
-import org.springframework.ui.Model;
 import com.example.emmarketplace.entity.MarketItem;
 import com.example.emmarketplace.service.MarketItemService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class PageController {
@@ -22,7 +20,7 @@ public class PageController {
         return "items";
     }
 
-    @GetMapping("/items{id}")
+    @GetMapping("/item/{id}")
     public String showItemDetail(@PathVariable long id, Model model) {
         MarketItem item = service.getItem(id);
         model.addAttribute("item", item);
