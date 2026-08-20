@@ -1,27 +1,22 @@
-package com.controller;
+package com.example.emmarketplace.controller;
 
 
-import ch.qos.logback.core.model.Model;
-import com.dto.MarketItemRequest;
-import com.entity.MarketItem;
-import com.repository.MarketItemRepository;
-import com.service.MarketItemService;
+import com.example.emmarketplace.dto.MarketItemRequest;
+import com.example.emmarketplace.entity.MarketItem;
+import com.example.emmarketplace.entity.User;
+import com.example.emmarketplace.service.MarketItemService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
-import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 
 @RestController
@@ -58,13 +53,19 @@ public class MarketController {
         return body;
     }
 
-
     @PostMapping
-    public ResponseEntity<MarketItem> create(@Valid @RequestBody MarketItemRequest request) {
-        MarketItem saved = service.createItem(request);
+    public ResponseEntity<?> create(@Valid @RequestBody MarketItemRequest request, HttpSession session) {
+
+        User loggedInUser = (User) session.getAttribute("user");
+        if (loggedInUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You must be logged in to post an item.");
+        }
+
+
+        MarketItem saved = service.createItem(request, loggedInUser);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .header("Location", "/item.html?id=" + saved.getId())
+                .header("Location", "/item/" + saved.getId())
                 .body(saved);
     }
 

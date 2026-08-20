@@ -1,4 +1,4 @@
-package com;
+package com.example.emmarketplace;
 
 
 import org.springframework.boot.SpringApplication;

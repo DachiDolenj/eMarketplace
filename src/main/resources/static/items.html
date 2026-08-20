@@ -47,7 +47,7 @@
                 data.items.forEach(item => {
                     const div = document.createElement("div");
                     div.innerHTML = `
-                        <h3><a href="/item.html?id=${item.id}">${item.name}</a></h3>
+                        <h3><a href="/item/${item.id}">${item.name}</a></h3>
                         <p>ფასი: ${item.price}₾</p>
                         <p>${item.description.substring(0, 100)}...</p>
                         <img src="${item.photoUrl}" alt="${item.name}" width="200">

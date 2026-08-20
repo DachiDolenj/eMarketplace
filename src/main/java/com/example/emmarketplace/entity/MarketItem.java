@@ -1,4 +1,4 @@
-package com.entity;
+package com.example.emmarketplace.entity;
 
 
 import jakarta.persistence.*;

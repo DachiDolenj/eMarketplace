@@ -1,7 +1,7 @@
-package com.service;
+package com.example.emmarketplace.service;
 
-import com.entity.User;
-import com.repository.UserRepository;
+import com.example.emmarketplace.entity.User;
+import com.example.emmarketplace.repository.UserRepository;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

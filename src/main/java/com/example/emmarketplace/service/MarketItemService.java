@@ -1,11 +1,11 @@
-package com.service;
+package com.example.emmarketplace.service;
 
 
-import com.dto.MarketItemRequest;
-import com.entity.MarketItem;
-import com.repository.MarketItemRepository;
+import com.example.emmarketplace.dto.MarketItemRequest;
+import com.example.emmarketplace.entity.MarketItem;
+import com.example.emmarketplace.entity.User;
+import com.example.emmarketplace.repository.MarketItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class MarketItemService {
@@ -35,13 +34,16 @@ public class MarketItemService {
                 .orElseThrow(() -> new IllegalArgumentException("Item not found: " + id));
     }
 
-    public MarketItem createItem(MarketItemRequest request) {
+    public MarketItem createItem(MarketItemRequest request, User user) {
         MarketItem item = new MarketItem();
         item.setName(request.getName());
         item.setPrice(request.getPrice());
         item.setDescription(request.getDescription());
         item.setPhotoUrl(request.getPhotoUrl());
         item.setSubmissionTime(LocalDateTime.now());
+
+        item.setUser(user);
+
         return repository.save(item);
     }
 

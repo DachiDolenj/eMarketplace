@@ -1,6 +1,6 @@
-package com.repository;
+package com.example.emmarketplace.repository;
 
-import com.entity.User;
+import com.example.emmarketplace.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

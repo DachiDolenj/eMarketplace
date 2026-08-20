@@ -1,4 +1,4 @@
-package com.dto;
+package com.example.emmarketplace.dto;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.DecimalMin;
