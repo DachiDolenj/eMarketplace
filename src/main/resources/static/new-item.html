@@ -18,24 +18,38 @@
 <a href="/index.html">🔙 დაბრუნება მთავარ გვერდზე</a>
 
 <script>
-    document.getElementById("newItemForm").addEventListener("submit", function(e) {
+    document.getElementById("newItemForm").addEventListener("submit", async function(e) {
         e.preventDefault();
         const formData = new FormData(e.target);
         const item = Object.fromEntries(formData);
 
-        fetch('/market', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(item)
-        })
-        .then(res => {
+        try {
+            const res = await fetch('/market', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(item)
+            });
+
             if (res.ok) {
                 alert("განცხადება წარმატებით დაემატა!");
-                window.location.href = "/index.html";
+                window.location.href = "/items";
             } else {
-                alert("შეცდომა დამატებისას!");
+                const text = await res.text();
+                try {
+                    const data = JSON.parse(text);
+                    if (data.errors) {
+                        const msgs = data.errors.map(err => err.defaultMessage).join('\n');
+                        alert("შეცდომა მონაცემებში:\n" + msgs);
+                    } else {
+                        alert("შეცდომა:\n" + text);
+                    }
+                } catch (err) {
+                    alert("შეცდომა:\n" + text);
+                }
             }
-        });
+        } catch (error) {
+            alert("სერვერთან კავშირის შეცდომა!");
+        }
     });
 </script>
 </body>

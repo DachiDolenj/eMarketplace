@@ -9,7 +9,7 @@
     <button type="submit">Login</button>
 </form>
 
-<p th:if="${param.error}" style="color: red;">Invalid username or password</p>
+<p th:if="${error}" style="color: red;" th:text="${error}"></p>
 </body>
 </html>
 
