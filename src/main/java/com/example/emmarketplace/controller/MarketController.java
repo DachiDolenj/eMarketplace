@@ -69,4 +69,21 @@ public class MarketController {
                 .body(saved);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteItem(@PathVariable Long id, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("user");
+
+        if (loggedInUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you must be logged in to delate an item.");
+        }
+
+        try {
+            service.delateItem(id, loggedInUser);
+            return ResponseEntity.ok("item delated successfully");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+
 }

@@ -58,6 +58,21 @@ public class MarketItemService {
         return repository.findAll(sortedPageable);
 
     }
+
+    public void delateItem(Long id, User loggedInUser){
+        MarketItem item = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("item not found"));
+
+        if (item.getUser() == null) {
+            throw new RuntimeException("ეს განცხადება ძველია და მფლობელი არ ჰყავს, ამიტომ მისი წაშლა შეუძლებელია.");
+        }
+
+        if (!item.getUser().getId().equals(loggedInUser.getId())){
+            throw new RuntimeException("თქვენ არ გაქვთ უფლება წაშალოთ სხვისი განცხადება!");
+        }
+        repository.delete(item);
+    }
+
 }
 
 
