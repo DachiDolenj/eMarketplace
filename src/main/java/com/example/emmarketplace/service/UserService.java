@@ -42,7 +42,7 @@ public class UserService {
         }
 
         if (existingUser != null){
-            throw new RuntimeException("Username or email is already taken ;)");
+            throw new RuntimeException("Username or email is already taken ;))");
         }
 
         u.setPassword(encoder.encode(u.getPassword()));
