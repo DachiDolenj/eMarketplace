@@ -35,6 +35,15 @@ public class UserService {
             throw new RuntimeException("User must be older than 13");
         }
 
+        User existingUser = repo.findByEmailOrUsername(u.getUsername());
+        if (existingUser == null){
+            existingUser = repo.findByEmailOrUsername(u.getEmail());
+        }
+        
+        if (existingUser != null){
+            throw new RuntimeException("Username or email is already taken ;)")
+        }
+
         u.setPassword(encoder.encode(u.getPassword()));
 
         repo.save(u);
