@@ -2,6 +2,7 @@ package com.example.emmarketplace.service;
 
 import com.example.emmarketplace.entity.User;
 import com.example.emmarketplace.repository.UserRepository;
+import jakarta.validation.constraints.NotNull;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +23,7 @@ public class UserService {
     }
 
     public void register(User u) {
-        if (!u.getUsername().matches("^[a-zA-Z0-9]{8,20}$")) {
+        if (!u.getUsername().matches("[a-zA-Z0-9]{8,20}$")) {
             throw new RuntimeException("Invalid username: must be 8–20 letters/digits");
         }
 
@@ -39,9 +40,9 @@ public class UserService {
         if (existingUser == null){
             existingUser = repo.findByEmailOrUsername(u.getEmail());
         }
-        
+
         if (existingUser != null){
-            throw new RuntimeException("Username or email is already taken ;)")
+            throw new RuntimeException("Username or email is already taken ;)");
         }
 
         u.setPassword(encoder.encode(u.getPassword()));

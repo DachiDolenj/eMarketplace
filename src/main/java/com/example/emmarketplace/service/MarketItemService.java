@@ -59,7 +59,7 @@ public class MarketItemService {
 
     }
 
-    public void delateItem(Long id, User loggedInUser){
+    public void deleteItem(Long id, User loggedInUser){
         MarketItem item = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("item not found"));
 

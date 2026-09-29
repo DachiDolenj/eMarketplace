@@ -78,7 +78,7 @@ public class MarketController {
         }
 
         try {
-            service.delateItem(id, loggedInUser);
+            service.deleteItem(id, loggedInUser);
             return ResponseEntity.ok("item delated successfully");
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
