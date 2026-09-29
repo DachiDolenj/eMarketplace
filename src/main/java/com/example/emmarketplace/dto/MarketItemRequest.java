@@ -19,7 +19,7 @@ public class MarketItemRequest {
     @NotBlank(message = "name in required")
     private String name;
 
-    @Column(name = "submittion_time")
+    @Column(name = "submission_time")
     private LocalDateTime submissionTime;
 
     @NotNull(message = "price is required")
