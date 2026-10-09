@@ -1,0 +1,128 @@
+# eMarketplace
+
+A classifieds-style web marketplace where users can register, log in, and post, browse, and delete items for sale. Built with Java, Spring Boot, and PostgreSQL.
+
+**Live demo:** _add your deployed link here_
+
+![Items page](docs/screenshots/items.png)
+
+## Features
+
+- User registration with validation (username 8-20 letters/digits, valid email, minimum age 14)
+- Secure login with BCrypt-hashed passwords and session-based authentication
+- Post items with name, price, description, and photo URL (input validated on the server)
+- Item listing with pagination and sorting (newest, oldest, price low-to-high, price high-to-low)
+- Item detail page
+- Ownership rules: only the user who posted an item can delete it
+- Database schema versioned with Flyway migrations
+- Runs with a single command using Docker Compose
+
+> The user interface is in Georgian.
+
+## Tech Stack
+
+| Area | Technology |
+| --- | --- |
+| Language | Java 17 |
+| Framework | Spring Boot 3.5 (Web, Data JPA, Validation, Thymeleaf) |
+| Database | PostgreSQL |
+| Migrations | Flyway |
+| Security | BCrypt password hashing (Spring Security Crypto) |
+| Frontend | Thymeleaf, HTML, CSS, vanilla JavaScript |
+| Build | Maven (wrapper included) |
+| Testing | JUnit 5, Mockito |
+| Containers | Docker, Docker Compose |
+
+## Screenshots
+
+| Items list | Item detail | Register |
+| --- | --- | --- |
+| ![Items](docs/screenshots/items.png) | ![Item](docs/screenshots/item.png) | ![Register](docs/screenshots/register.png) |
+
+## Getting Started
+
+### Option 1: Docker Compose (recommended)
+
+Requirements: [Docker](https://www.docker.com/products/docker-desktop/)
+
+```bash
+git clone https://github.com/DachiDolenj/eMarketplace.git
+cd eMarketplace
+cp .env.example .env        # then edit .env and set your own DB_PASSWORD
+docker compose up --build
+```
+
+Open http://localhost:8080/register to create an account, then http://localhost:8080/items.
+
+To stop: `docker compose down` (add `-v` to also delete the database data).
+
+### Option 2: Run locally
+
+Requirements: JDK 17 and a running PostgreSQL instance.
+
+1. Create a database:
+   ```sql
+   CREATE DATABASE emarketplace;
+   ```
+2. Set the database password as an environment variable.
+   - macOS / Linux: `export DB_PASSWORD=your_password`
+   - Windows PowerShell: `$env:DB_PASSWORD="your_password"`
+3. Start the app (Flyway creates the tables on first run):
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+
+## Configuration
+
+| Variable | Description | Default |
+| --- | --- | --- |
+| `DB_PASSWORD` | PostgreSQL password | none (required) |
+| `SPRING_DATASOURCE_URL` | JDBC URL | `jdbc:postgresql://localhost:5432/emarketplace` |
+| `SPRING_DATASOURCE_USERNAME` | Database user | `postgres` |
+| `PORT` | HTTP port | `8080` |
+
+## API Overview
+
+| Method | Path | Description | Auth |
+| --- | --- | --- | --- |
+| GET | `/market?page=0&size=10&sort=dateDesc` | List items (`dateDesc`, `dateAsc`, `priceAsc`, `priceDesc`) | No |
+| POST | `/market` | Create an item (JSON body) | Yes |
+| DELETE | `/market/{id}` | Delete your own item | Yes |
+| GET | `/api/user` | Current logged-in user | Yes |
+
+Pages: `/register`, `/login`, `/items`, `/item/{id}`
+
+## Running Tests
+
+```bash
+./mvnw test
+```
+
+Service-layer tests use JUnit 5 and Mockito, so they run without a database.
+
+## Project Structure
+
+```
+src/main/java/com/example/emmarketplace
+├── controller   # REST and page controllers
+├── service      # Business logic (users, items)
+├── repository   # Spring Data JPA repositories
+├── entity       # JPA entities (User, MarketItem)
+└── dto          # Request objects with validation
+src/main/resources
+├── db/migration # Flyway SQL migrations
+├── templates    # Thymeleaf pages
+└── static       # CSS and static pages
+```
+
+## Roadmap
+
+- Replace session handling with Spring Security
+- Image upload instead of photo URLs
+- Search and filtering by price range
+- Pagination controls in the UI
+- CI pipeline with GitHub Actions
+
+## Author
+
+Dachi - [GitHub](https://github.com/DachiDolenj)
