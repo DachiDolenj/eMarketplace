@@ -37,12 +37,11 @@ public class UserService {
         }
 
         User existingUser = repo.findByEmailOrUsername(u.getUsername());
-        if (existingUser == null){
+        if (existingUser == null) {
             existingUser = repo.findByEmailOrUsername(u.getEmail());
         }
-
-        if (existingUser != null){
-            throw new RuntimeException("Username or email is already taken ;))");
+        if (existingUser != null) {
+            throw new RuntimeException("Username or Email is already taken!");
         }
 
         u.setPassword(encoder.encode(u.getPassword()));

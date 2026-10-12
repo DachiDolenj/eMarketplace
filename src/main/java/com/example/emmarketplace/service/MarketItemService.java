@@ -61,14 +61,14 @@ public class MarketItemService {
 
     public void deleteItem(Long id, User loggedInUser){
         MarketItem item = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("item not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Item not found"));
 
         if (item.getUser() == null) {
-            throw new RuntimeException("ეს განცხადება ძველია და მფლობელი არ ჰყავს, ამიტომ მისი წაშლა შეუძლებელია.");
+            throw new RuntimeException("This item is old and has no owner, so it cannot be deleted.");
         }
 
         if (!item.getUser().getId().equals(loggedInUser.getId())){
-            throw new RuntimeException("თქვენ არ გაქვთ უფლება წაშალოთ სხვისი განცხადება!");
+            throw new RuntimeException("You do not have permission to delete someone else's item!");
         }
         repository.delete(item);
     }

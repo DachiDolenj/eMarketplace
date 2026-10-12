@@ -15,6 +15,11 @@ public class PageController {
         this.service = service;
     }
 
+    @GetMapping("/")
+    public String home(){
+        return "redirect:/items";
+    }
+
     @GetMapping("/items")
     public String showItemsPage() {
         return "items";

@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="ka">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ახალი განცხადება - eMarketplace</title>
+    <title>Add New Item - eMarketplace</title>
 </head>
 <body>
-<h1>ახალი განცხადების დამატება</h1>
+<h1>Add a New Item</h1>
 
 <form id="newItemForm">
-    <label>სახელი: <input type="text" name="name" required></label><br>
-    <label>ფასი: <input type="number" name="price" required></label><br>
-    <label>აღწერა:<br><textarea name="description" rows="4" cols="50" required></textarea></label><br>
-    <label>სურათის ბმული (photoUrl): <input type="url" name="photoUrl" required></label><br>
-    <button type="submit">დამატება</button>
+    <label>Name: <input type="text" name="name" required></label><br><br>
+    <label>Price: <input type="number" name="price" step="0.01" required></label><br><br>
+    <label>Description:<br><textarea name="description" rows="4" cols="50" required></textarea></label><br><br>
+    <label>Photo URL: <input type="url" name="photoUrl" required></label><br><br>
+    <button type="submit">Submit</button>
 </form>
-
-<a href="/index.html">🔙 დაბრუნება მთავარ გვერდზე</a>
+<br>
+<a href="/items">🔙 Back to items</a>
 
 <script>
     document.getElementById("newItemForm").addEventListener("submit", async function(e) {
@@ -31,7 +31,7 @@
             });
 
             if (res.ok) {
-                alert("განცხადება წარმატებით დაემატა!");
+                alert("Item added successfully!");
                 window.location.href = "/items";
             } else {
                 const text = await res.text();
@@ -39,16 +39,16 @@
                     const data = JSON.parse(text);
                     if (data.errors) {
                         const msgs = data.errors.map(err => err.defaultMessage).join('\n');
-                        alert("შეცდომა მონაცემებში:\n" + msgs);
+                        alert("Data Error:\n" + msgs);
                     } else {
-                        alert("შეცდომა:\n" + text);
+                        alert("Error:\n" + text);
                     }
                 } catch (err) {
-                    alert("შეცდომა:\n" + text);
+                    alert("Error:\n" + text);
                 }
             }
         } catch (error) {
-            alert("სერვერთან კავშირის შეცდომა!");
+            alert("Server connection error!");
         }
     });
 </script>

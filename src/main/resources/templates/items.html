@@ -1,88 +1,118 @@
 <!DOCTYPE html>
-<html lang="ka">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>eMarketplace - განცხადებები</title>
-
+    <title>eMarketplace - Items</title>
     <link rel="stylesheet" href="/items.css">
-
 </head>
 <body>
-    <div id="top-bar">
+<div id="top-bar">
+    <h1 id="page-title">All Items</h1>
 
-        <h1 id = "page-title" >ყველა განცხადება</h1>
-
-                <div id = "add-new-item">
-                <a id = "add-new-item-text" href="/new-item.html">➕ დაამატე ახალი განცხადება</a>
-                </div>
-
-        <a href="/login" id="user-info">Loading...</a>
+    <div id="add-new-item">
+        <a id="add-new-item-text" href="/new-item.html">➕ Add New Item</a>
     </div>
 
-    <div id="items-container"></div>
+    <div id="user-info">Loading...</div>
+</div>
 
-    <div id="pagination"></div>
+<div id="items-container"></div>
 
+<div id="pagination">
+    <button id="prev-page" onclick="changePage(-1)">Previous</button>
+    <span id="page-indicator">Page 1 of 1</span>
+    <button id="next-page" onclick="changePage(1)">Next</button>
+</div>
 
-    <script>
-        fetch('/market?page=0')
+<script>
+    let currentPage = 0;
+    let totalPages = 1;
+
+    function loadItems(page) {
+        fetch(`/market?page=${page}`)
             .then(res => res.json())
             .then(data => {
+                currentPage = data.currentPage;
+                totalPages = data.totalPages;
+
                 const container = document.getElementById("items-container");
+                container.innerHTML = ""; // Clear existing items
+
                 data.items.forEach(item => {
                     const div = document.createElement("div");
+                    div.className = "item-card"; // Apply flex layout styling
                     div.innerHTML = `
-                        <h3><a href="/item/${item.id}">${item.name}</a></h3>
-                        <p>ფასი: ${item.price}₾</p>
-                        <p>${item.description.substring(0, 100)}...</p>
-                        <img src="${item.photoUrl}" alt="${item.name}" width="200">
-                        <br><br>
-                        <button onclick="deleteItem(${item.id})" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px;">🗑 წაშლა</button>
-                        <hr>
+                        <div>
+                            <h3><a href="/item/${item.id}">${item.name}</a></h3>
+                            <p><strong>Price:</strong> ${item.price}₾</p>
+                            <p>${item.description.substring(0, 100)}...</p>
+                        </div>
+                        <div>
+                            <img src="${item.photoUrl}" alt="${item.name}">
+                            <button class="delete-btn" onclick="deleteItem(${item.id})">🗑 Delete</button>
+                        </div>
                     `;
                     container.appendChild(div);
                 });
+
+                // Update Pagination UI
+                document.getElementById("page-indicator").innerText = `Page ${currentPage + 1} of ${totalPages || 1}`;
+                document.getElementById("prev-page").disabled = currentPage === 0;
+                document.getElementById("next-page").disabled = currentPage >= totalPages - 1;
             });
+    }
 
-        fetch('/api/user')
-            .then(res => {
-                if (res.status === 200) {
-                    return res.json();
-                } else {
-                    throw new Error("Not logged in");
-                }
-            })
-            .then(user => {
-                const userInfo = document.getElementById("user-info");
-                userInfo.innerHTML = `მომხმარებელი: ${user.username} <span id="logout-btn">log out</span>`;
-
-                document.getElementById("logout-btn").addEventListener("click", () => {
-                    fetch('/logout', { method: 'POST' })
-                        .then(() => location.reload());
-                });
-            })
-            .catch(() => {
-                document.getElementById("user-info").innerText = "Login";
-            });
-
-        function deleteItem(id) {
-            if (!confirm("ნამდვილად გსურთ ამ განცხადების წაშლა? (Are you sure?)")) {
-                return;
-            }
-
-            fetch(`/market/${id}`, {
-                method: 'DELETE'
-            })
-            .then(async res => {
-                if (res.ok) {
-                    alert("განცხადება წაიშალა! (Item deleted)");
-                    location.reload(); // Refresh the page to show the updated list
-                } else {
-                    const msg = await res.text();
-                    alert("შეცდომა: " + msg);
-                }
-            });
+    function changePage(direction) {
+        const newPage = currentPage + direction;
+        if (newPage >= 0 && newPage < totalPages) {
+            loadItems(newPage);
         }
-    </script>
+    }
+
+    loadItems(currentPage);
+
+    fetch('/api/user')
+        .then(res => {
+            if (res.status === 200) {
+                return res.json();
+            } else {
+                throw new Error("Not logged in");
+            }
+        })
+        .then(user => {
+            const userInfo = document.getElementById("user-info");
+            userInfo.innerHTML = `User: ${user.username} <span id="logout-btn">Log Out</span>`;
+
+            document.getElementById("logout-btn").addEventListener("click", () => {
+                fetch('/logout', { method: 'POST' })
+                    .then(() => location.reload());
+            });
+        })
+        .catch(() => {
+            // Not logged in -> Show Login and Register links
+            document.getElementById("user-info").innerHTML = `
+                <a href="/login">Login</a> | <a href="/register">Register</a>
+            `;
+        });
+
+    function deleteItem(id) {
+        if (!confirm("Are you sure you want to delete this item?")) {
+            return;
+        }
+
+        fetch(`/market/${id}`, {
+            method: 'DELETE'
+        })
+        .then(async res => {
+            if (res.ok) {
+                alert("Item deleted successfully!");
+                loadItems(currentPage);
+            } else {
+                const msg = await res.text();
+                alert("Error: " + msg);
+            }
+        });
+    }
+</script>
 </body>
 </html>

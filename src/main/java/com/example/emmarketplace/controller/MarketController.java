@@ -74,13 +74,13 @@ public class MarketController {
         User loggedInUser = (User) session.getAttribute("user");
 
         if (loggedInUser == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you must be logged in to delate an item.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You must be logged in to delete an item.");
         }
 
         try {
             service.deleteItem(id, loggedInUser);
-            return ResponseEntity.ok("item delated successfully");
-        }catch (Exception e){
+            return ResponseEntity.ok("Item deleted successfully");
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
