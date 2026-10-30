@@ -4,20 +4,21 @@ A classifieds-style web marketplace where users can register, log in, and post, 
 
 **Live demo:** _add your deployed link here_
 
+<!-- Add this back after you put the screenshot in docs/screenshots/:
 ![Items page](docs/screenshots/items.png)
+-->
 
 ## Features
 
 - User registration with validation (username 8-20 letters/digits, valid email, minimum age 14)
 - Secure login with BCrypt-hashed passwords and session-based authentication
 - Post items with name, price, description, and photo URL (input validated on the server)
-- Item listing with pagination and sorting (newest, oldest, price low-to-high, price high-to-low)
+- Item listing with Previous/Next pagination, and sorting through the API (newest, oldest, price low-to-high, price high-to-low)
 - Item detail page
 - Ownership rules: only the user who posted an item can delete it
 - Database schema versioned with Flyway migrations
-- Runs with a single command using Docker Compose
 
-> The user interface is in Georgian.
+> The user interface is in English.
 
 ## Tech Stack
 
@@ -30,33 +31,19 @@ A classifieds-style web marketplace where users can register, log in, and post, 
 | Security | BCrypt password hashing (Spring Security Crypto) |
 | Frontend | Thymeleaf, HTML, CSS, vanilla JavaScript |
 | Build | Maven (wrapper included) |
-| Testing | JUnit 5, Mockito |
-| Containers | Docker, Docker Compose |
+| Testing | JUnit 5 (Spring Boot Test) |
 
+<!-- Add this back after you put the screenshots in docs/screenshots/:
 ## Screenshots
 
 | Items list | Item detail | Register |
 | --- | --- | --- |
 | ![Items](docs/screenshots/items.png) | ![Item](docs/screenshots/item.png) | ![Register](docs/screenshots/register.png) |
+-->
 
 ## Getting Started
 
-### Option 1: Docker Compose (recommended)
-
-Requirements: [Docker](https://www.docker.com/products/docker-desktop/)
-
-```bash
-git clone https://github.com/DachiDolenj/eMarketplace.git
-cd eMarketplace
-cp .env.example .env        # then edit .env and set your own DB_PASSWORD
-docker compose up --build
-```
-
-Open http://localhost:8080/register to create an account, then http://localhost:8080/items.
-
-To stop: `docker compose down` (add `-v` to also delete the database data).
-
-### Option 2: Run locally
+### Run locally
 
 Requirements: JDK 17 and a running PostgreSQL instance.
 
@@ -71,6 +58,7 @@ Requirements: JDK 17 and a running PostgreSQL instance.
    ```bash
    ./mvnw spring-boot:run
    ```
+4. Open http://localhost:8080/register to create an account, then http://localhost:8080/items.
 
 ## Configuration
 
@@ -79,7 +67,7 @@ Requirements: JDK 17 and a running PostgreSQL instance.
 | `DB_PASSWORD` | PostgreSQL password | none (required) |
 | `SPRING_DATASOURCE_URL` | JDBC URL | `jdbc:postgresql://localhost:5432/emarketplace` |
 | `SPRING_DATASOURCE_USERNAME` | Database user | `postgres` |
-| `PORT` | HTTP port | `8080` |
+| `SERVER_PORT` | HTTP port | `8080` |
 
 ## API Overview
 
@@ -89,8 +77,9 @@ Requirements: JDK 17 and a running PostgreSQL instance.
 | POST | `/market` | Create an item (JSON body) | Yes |
 | DELETE | `/market/{id}` | Delete your own item | Yes |
 | GET | `/api/user` | Current logged-in user | Yes |
+| POST | `/logout` | Log out and end the session | Yes |
 
-Pages: `/register`, `/login`, `/items`, `/item/{id}`
+Pages: `/register`, `/login`, `/items`, `/item/{id}`, `/new-item.html`
 
 ## Running Tests
 
@@ -98,7 +87,7 @@ Pages: `/register`, `/login`, `/items`, `/item/{id}`
 ./mvnw test
 ```
 
-Service-layer tests use JUnit 5 and Mockito, so they run without a database.
+The project currently has a Spring Boot context-load test, which needs a running PostgreSQL instance and the `DB_PASSWORD` variable set.
 
 ## Project Structure
 
@@ -117,10 +106,12 @@ src/main/resources
 
 ## Roadmap
 
+- Add service-layer unit tests with JUnit 5 and Mockito
 - Replace session handling with Spring Security
 - Image upload instead of photo URLs
 - Search and filtering by price range
-- Pagination controls in the UI
+- Sorting controls in the UI
+- Docker Compose setup to run the app and database with one command
 - CI pipeline with GitHub Actions
 
 ## Author
