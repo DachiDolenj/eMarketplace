@@ -4,9 +4,6 @@ A classifieds-style web marketplace where users can register, log in, and post, 
 
 **Live demo:** _add your deployed link here_
 
-<!-- Add this back after you put the screenshot in docs/screenshots/:
-![Items page](docs/screenshots/items.png)
--->
 
 ## Features
 
@@ -33,13 +30,6 @@ A classifieds-style web marketplace where users can register, log in, and post, 
 | Build | Maven (wrapper included) |
 | Testing | JUnit 5 (Spring Boot Test) |
 
-<!-- Add this back after you put the screenshots in docs/screenshots/:
-## Screenshots
-
-| Items list | Item detail | Register |
-| --- | --- | --- |
-| ![Items](docs/screenshots/items.png) | ![Item](docs/screenshots/item.png) | ![Register](docs/screenshots/register.png) |
--->
 
 ## Getting Started
 
